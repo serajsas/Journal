@@ -18,6 +18,14 @@ mongoose.connect(
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 
-
+app.get('/',(req,res)=>{
+    res.render('pages/index')
+})
+app.get('/register',(req,res)=>{
+    res.render('pages/register')
+})
+app.get('/login',(req,res)=>{
+    res.render('pages/login')
+})
 app.listen(8080);
 console.log('Server is listening on port 8080');
