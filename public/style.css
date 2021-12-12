@@ -1,0 +1,50 @@
+:root {
+    --mint: #c7eced;
+    --: #32325d;
+}
+h1,
+h2,
+.btn,
+.navbar {
+  font-family: Poppins, Helvetica, sans-serif, Arial;
+}
+.banner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+
+.login-container {
+  margin: 0px;
+  padding: 2vh;
+}
+
+  
+  .form-control{
+      margin: 1vh;
+  }
+  .header-image {
+    width: 40%;
+  }
+  
+  .header-image img {
+    width: 100%;
+  }
+  .home-body{
+    background-image: url("background.jpeg");
+  }
+
+  .compose-area,
+  .all-posts {
+    padding: 4vh;
+    padding-top: 10vh;
+  }
+  
+  .compose-form > label {
+    padding-top: 2vh;
+  }
+  .form-control{
+    overflow: scroll;
+  }
