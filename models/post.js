@@ -8,6 +8,9 @@ const postSchema = new mongoose.Schema({
     date: {
         type: Date,
         required: [true, 'Date cannot be blank']
+    },title: {
+        type: String,
+        required: [true, 'Title cannot be blank']
     },
   });
     

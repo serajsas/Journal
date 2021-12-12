@@ -39,13 +39,18 @@ app.use(cookieParser());
 // routes
 app.use('/', authRoutes);
 
-app.get('*', (req, res) => {
-    if (req.session.views) {
-        req.session.views += 1;
-    } else {
-        req.session.views = 1;
-    }
-    res.render('./pages/home',{value:req.session.views})
+
+app.get('/compose', (req, res) => {
+    res.render('./pages/compose')
+})
+
+
+app.get('/home', (req, res) => {
+    res.render('./pages/home', { value: req.session.views })
+})
+
+app.get('*', isLoggedIn, (req, res) => {
+    res.render('./pages/home', { value: req.session.views })
 })
 app.listen(process.env.PORT);
 console.log(`Server is listening on port ${process.env.PORT}`);

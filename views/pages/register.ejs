@@ -7,6 +7,11 @@
                     <div class="col-sm-8">
                         <div class="card">
                             <div class="card-body">
+                                <% if (err) { %>
+                                    <div class="alert alert-warning" role="alert">
+                                        <%= err %>
+                                    </div>
+                                    <% } %>
                                 <form action="/register" method="POST">
                                     <div class="form-group">
                                         <label for="text">Username</label>
@@ -25,14 +30,8 @@
                             </form>
                         </div>
 
+                        <!-- <div class="header-image"><img src="calendar-colour-1200px.png" /></div> -->
 
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="card">
-                            <div class="card-body">
-                                Journaling all the time!!
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

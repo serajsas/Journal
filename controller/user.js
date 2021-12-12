@@ -1,4 +1,6 @@
 const User = require('../models/user');
+const bcrypt = require('bcrypt')
+
 /**
  * 
  * @param {any} req 
@@ -7,41 +9,62 @@ const User = require('../models/user');
  */
 const createUser = async function (req, res, next) {
     const user = new User(req.body);
-    console.log(user._id);
-    let foundUser = await User.findUser(user.username, user.email);
-    if (!user.email || !user.password || !user.username ||
-        foundUser != null)
-        return res.render('./pages/register', false);
-
+    if (!user.email || !user.password || !user.username)
+        return res.render('./pages/register', { err: new Error("Missing Credentials") });
+    const foundUser = await User.findUser(user.username, user.email);
+    if (foundUser)
+        return res.render('./pages/register', { err: new Error("User Already Exists, try new username or email!") });
     user.save()
         .then(() => {
-            res.redirect('/home');
+            res.redirect('/login');
         })
         .catch((err) => {
             console.log(err);
         })
+}
 
-}
 const login = async function (req, res, next) {
+    if (req.session.loggedIn)
+        return res.redirect('/home')
     const user = new User(req.body);
-    // this should be verify user 
-    let foundUser = await User.findUser(user.username, user.email);
-    // console.log("in controller/user/login method " + foundUser._id);
-    // foundUser.isVerified should be true but for testing now i will keep it false
-    if (foundUser != null && foundUser.isVerified === false && foundUser != null) {
-        req.session.id = user._id;
-        req.session.isVerified = user._id;
-        // I want to check if the user password is wrong or if the user is not found in the database
-    } else if(foundUser != null ) {
-        return res.redirect('login');
+    if (!user.username || !user.password)
+        return res.render('./pages/login', { err: new Error("Missing Credentials") })
+
+    const foundUser = await User.findUser(user.username, user.email);
+
+    if (foundUser != null) {
+        const match = await bcrypt.compare(user.password, foundUser.password);
+        if (!match)
+            return res.render('./pages/login', { err: new Error("Check your username or password") })
+    }else{
+        return res.render('./pages/login', { err: new Error("Check your username or password") })
     }
-    res.redirect('/home');
+
+    if (!req.session.loggedIn)
+        req.session.loggedIn = user._id;
+    return res.redirect('/home')
 }
+
 const renderLogin = function (req, res) {
-    return res.render('./pages/login', { isVerified: req.session.isVerified });
+    if (req.session.loggedIn) {
+        // find the user and redirect to the home page 
+        const user = User.findUserByID(req.session.loggedIn);
+        if (user) {
+            return res.redirect('/home')
+        }
+    }
+    return res.render('./pages/login', { err: false });
 }
 
 const renderRegister = function (req, res) {
-    return res.render('./pages/register');
+    return res.render('./pages/register', { err: false });
 }
-module.exports = { createUser, renderLogin, renderRegister, login }
+
+const renderLogout = function (req, res) {
+    req.session.destroy(function (err) {
+        if (!err) {
+            return res.redirect('/login')
+        }
+    })
+}
+module.exports = { createUser, renderLogin, renderRegister, login, renderLogout }

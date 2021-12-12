@@ -1,11 +1,14 @@
 const User = require('./models/user');
 
-const isLoggedIn = function(req,res,next){
-    const user = User.findUser(req.body);
-    console.log("in middleware/isLoggedIn: " + user)
-    if(user != null && user.isVerified == true)
-        return next();
-    return res.redirect('/login');
+const isLoggedIn = function (req, res, next) {
+    if (req.session.loggedIn) {
+        // find the user and redirect to the home page 
+        const user = User.findUserByID(req.session.loggedIn);
+        if (user) {
+            return next();
+        }
+    }
+    res.render('./pages/login', { err: false })
 }
 
-module.exports = {isLoggedIn}
+module.exports = { isLoggedIn }
