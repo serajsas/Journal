@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 const path = require('path');
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
-
-const authRoutes = require('./routes/authroutes')
+const { renderBlogs } = require('./controller/journal')
+const authRoutes = require('./routes/authRoutes')
+const journalRoutes = require('./routes/journalRoutes')
 require('dotenv').config()
-const { isLoggedIn } = require('./middlewares')
 
 const uri = `mongodb+srv://serajsas:${process.env.DB_PASSWORD}@cluster0.sndj1.mongodb.net/accounts`;
 const express = require('express');
@@ -38,19 +38,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 // routes
 app.use('/', authRoutes);
+app.use('/', journalRoutes);
 
-
-app.get('/compose', (req, res) => {
-    res.render('./pages/compose')
-})
-
-
-app.get('/home', (req, res) => {
-    res.render('./pages/home', { value: req.session.views })
-})
-
-app.get('*', isLoggedIn, (req, res) => {
-    res.render('./pages/home', { value: req.session.views })
+app.get('*', (req, res) => {
+    res.render('./pages/mainPage')
 })
 app.listen(process.env.PORT);
 console.log(`Server is listening on port ${process.env.PORT}`);
