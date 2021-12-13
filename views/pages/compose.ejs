@@ -1,25 +1,19 @@
 <head>
-    <%- include('../partials/head'); %>
+    <%- include('../partials/head') %>
+        <%- include('../partials/navbarAfterLogin') %>
 </head>
-
 <div class="compose-area container">
     <h2>Start writing now, your space is endless...</h2>
     <form class="form-group compose-form" action="/compose" method="post" autocomplete="off">
-        <label for="date">Date</label>
-        <input type="date" class="form-control" name="date" id="datePicker" required>
         <label for="title">Today's Chapter Title</label>
-        <input type="text" class="form-control" name="title" rows="5" cols="30" required contenteditable="true"></input>
-        <label for="postBody">Post</label>
-        <textarea class="form-control" name="postBody" rows="5" cols="30" required contenteditable="true"></textarea>
-        <button class="compose-btn btn btn-primary" type="submit" name="button">Publish</button>
+        <input type="text" class="form-control" name="title" rows="5" cols="30" required contenteditable="true"
+            value="<% if (journal) { %><%= journal.title %><% } %>">
+
+
+        <label for="journal">Journal</label>
+        <textarea class="form-control post-area" name="body" required
+            contenteditable="true"><% if (journal) { %><%= journal.body%><% } %></textarea>
+        <button class="compose-btn btn btn-dark save-btn" type="submit" name="button">Save</button>
     </form>
-    <script>
-        Date.prototype.toDateInputValue = (function () {
-            var local = new Date(this);
-            local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
-            return local.toJSON().slice(0, 10);
-        });
-        document.getElementById('datePicker').value = new Date().toDateInputValue();
-    </script>
 </div>
 <%- include('../partials/footer') %>

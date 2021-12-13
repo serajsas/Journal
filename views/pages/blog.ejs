@@ -1,0 +1,20 @@
+<%- include('../partials/head') %>
+    <%- include('../partials/navbarAfterLogin') %>
+
+        <div class="container ">
+            <h2 class="post-container">
+                <% if (journal) { %>
+                    <%= journal.title %>
+                        <% } %> On:
+                            <% if (journal) { %>
+                                <%= journal.date.toLocaleDateString("en-US") %>
+                                    <% } %>
+            </h2>
+            <p class="blog-para post-container">
+                <% if (journal) { %>
+                    <%= journal.body%>
+                        <% } %>
+            </p>
+        </div>
+
+        <%- include("../partials/footer") -%>

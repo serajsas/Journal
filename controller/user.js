@@ -40,9 +40,11 @@ const login = async function (req, res, next) {
         return res.render('./pages/login', { err: new Error("Check your username or password") })
     }
 
-    if (!req.session.loggedIn)
-        req.session.loggedIn = user._id;
-    return res.redirect('/home')
+    if (!req.session.loggedIn){
+        req.session.loggedIn = foundUser._id;
+        req.session.username = foundUser.username;
+    }
+    return res.redirect('/blogs')
 }
 
 const renderLogin = function (req, res) {
@@ -50,7 +52,7 @@ const renderLogin = function (req, res) {
         // find the user and redirect to the home page 
         const user = User.findUserByID(req.session.loggedIn);
         if (user) {
-            return res.redirect('/home')
+            return res.redirect('/blogs')
         }
     }
     return res.render('./pages/login', { err: false });
@@ -63,7 +65,7 @@ const renderRegister = function (req, res) {
 const renderLogout = function (req, res) {
     req.session.destroy(function (err) {
         if (!err) {
-            return res.redirect('/login')
+            return res.redirect('/')
         }
     })
 }
