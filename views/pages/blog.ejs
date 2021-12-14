@@ -15,6 +15,9 @@
                     <%= journal.body%>
                         <% } %>
             </p>
+            <a href="/compose/edit/<%= journal._id %>">
+                <button class="compose-btn btn btn-dark save-btn" type="submit" name="button">Edit</button>
+            </a>
         </div>
 
         <%- include("../partials/footer") -%>

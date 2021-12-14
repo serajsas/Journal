@@ -12,6 +12,23 @@ const renderCompose = function (req, res, args = null) {
     return res.render('./pages/compose', { journal: args })
 }
 
+const renderEditBlog = async function (req, res) {
+    const user = await User.findUser(req.session.username);
+    const journal = user.blogs.find((blog) => blog._id == req.params.id)
+    return res.render('./pages/editBlog', { journal })
+
+}
+
+const updateJournal = async function(req,res){
+    const user = await User.findUser(req.session.username);
+    const journal = user.blogs.find((blog) => blog._id == req.params.id)
+    journal.body = req.body.body;
+    journal.title = req.body.title;
+    journal.date = new Date().toLocaleDateString().split('T')[0];
+    await user.save();
+    return res.render('./pages/blog', { journal })
+    
+}
 
 const renderBlog = async function (req, res) {
     const user = await User.findUser(req.session.username);
@@ -25,4 +42,4 @@ const renderBlogs = async function (req, res) {
 }
 
 
-module.exports = { createJournal, renderCompose, renderBlog, renderBlogs }
+module.exports = { createJournal, renderCompose, renderBlog, renderBlogs, renderEditBlog,updateJournal }
