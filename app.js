@@ -6,7 +6,7 @@ const authRoutes = require('./routes/authRoutes')
 const journalRoutes = require('./routes/journalRoutes')
 const dotenv = require('dotenv').config() 
 
-const uri = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.DB_PASSWORD}@cluster0.sndj1.mongodb.net/accounts`
+const uri = `mongodb+srv://${process.env.USERNAME}:${process.env.DB_PASSWORD}@cluster0.sndj1.mongodb.net/accounts`;
 const express = require('express');
 const app = express();
 mongoose.connect(
