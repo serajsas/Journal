@@ -7,7 +7,7 @@ const authRoutes = require('./routes/authRoutes')
 const journalRoutes = require('./routes/journalRoutes')
 require('dotenv').config()
 
-const uri = `mongodb+srv://serajsas:${process.env.DB_PASSWORD}@cluster0.sndj1.mongodb.net/accounts`;
+const uri = `mongodb+srv://${process.env.USERNAME}:${process.env.DB_PASSWORD}@cluster0.sndj1.mongodb.net/accounts`;
 const express = require('express');
 const app = express();
 mongoose.connect(
@@ -24,7 +24,7 @@ mongoose.connect(
 //set up express session
 const oneDay = 1000 * 60 * 60 * 24;
 app.use(session({
-    secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
+    secret: `${process.env.SESSION_SECRET}`,
     saveUninitialized: true,
     cookie: { maxAge: oneDay },
     resave: false
