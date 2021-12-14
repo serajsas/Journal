@@ -15,6 +15,6 @@ router.route('/blog/:id')
     .get(isLoggedIn, renderBlog)
 
 router.route('/blogs')
-    .get(isLoggedIn, renderBlogs)
+    .get(isLoggedIn,renderBlogs)
 
 module.exports = router;

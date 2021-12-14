@@ -23,7 +23,7 @@ const createUser = async function (req, res, next) {
         })
 }
 
-const login = async function (req, res, next) {
+const login = async function (req, res) {
     if (req.session.loggedIn)
         return res.redirect('/home')
     const user = new User(req.body);
@@ -44,13 +44,13 @@ const login = async function (req, res, next) {
         req.session.loggedIn = foundUser._id;
         req.session.username = foundUser.username;
     }
-    return res.redirect('/blogs')
+    return res.render("./pages/blogs", { name: foundUser.username, journals: foundUser.blogs });
 }
 
-const renderLogin = function (req, res) {
+const renderLogin = async function (req, res) {
     if (req.session.loggedIn) {
         // find the user and redirect to the home page 
-        const user = User.findUserByID(req.session.loggedIn);
+        const user = await User.findUserByID(req.session.loggedIn);
         if (user) {
             return res.redirect('/blogs')
         }
