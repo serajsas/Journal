@@ -43,5 +43,5 @@ app.use('/', journalRoutes);
 app.get('*', (req, res) => {
     res.render('./pages/mainPage')
 })
-app.listen(process.env.PORT);
+app.listen(process.env.PORT || 8000);
 console.log(`Server is listening on port ${process.env.PORT}`);
