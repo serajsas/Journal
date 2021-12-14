@@ -2,12 +2,11 @@ const mongoose = require('mongoose');
 const path = require('path');
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
-const { renderBlogs } = require('./controller/journal')
 const authRoutes = require('./routes/authRoutes')
 const journalRoutes = require('./routes/journalRoutes')
-require('dotenv').config()
+const dotenv = require('dotenv').config() 
 
-const uri = `mongodb+srv://serajsas:${process.env.DB_PASSWORD}@cluster0.sndj1.mongodb.net/accounts`;
+const uri = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.DB_PASSWORD}@cluster0.sndj1.mongodb.net/accounts`
 const express = require('express');
 const app = express();
 mongoose.connect(
@@ -22,12 +21,13 @@ mongoose.connect(
     console.log(err)
 })
 //set up express session
+app.set('trust proxy', 1);
 const oneDay = 1000 * 60 * 60 * 24;
 app.use(session({
-    secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
+    secret: `${process.env.SESSION_SECRET}`,
     saveUninitialized: true,
-    cookie: { maxAge: oneDay },
-    resave: false
+    cookie: { secure: true, maxAge: oneDay },
+    resave: false,
 }));
 // set the view engine to ejs
 app.set('view engine', 'ejs');
