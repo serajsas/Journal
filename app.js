@@ -29,7 +29,7 @@ mongoose.connect(
 //set up express session
 const store = MongoDBStore.create({
     mongoUrl: url,
-    secret: `${process.env.SESSION_SECRET}`,
+    secret: `${process.env.SESSION_SECRET}` || "thisismysecret",
     touchAfter: 24 * 60,
     autoRemove: 'interval'
 });
@@ -40,7 +40,7 @@ store.on("error", function (e) {
 
 app.use(session({
     store,
-    secret: `${process.env.SESSION_SECRET}`,
+    secret: `${process.env.SESSION_SECRET}` || "thisismysecret",
     saveUninitialized: true,
     // cookie: { secure: true },
     resave: false,
@@ -60,4 +60,8 @@ app.get('*', (req, res) => {
     res.render('./pages/mainPage')
 })
 app.listen(process.env.PORT || 8080);
+<<<<<<< HEAD
 console.log(`Server is listening on port ${process.env.PORT}`);
+=======
+console.log(`Server is listening on port ${process.env.PORT} || 8080`);
+>>>>>>> 714063e94db5e129b1353f45c64f4c71a0bd10ad
