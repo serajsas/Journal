@@ -29,7 +29,7 @@ mongoose.connect(
 //set up express session
 const store = MongoDBStore.create({
     mongoUrl: url,
-    secret: `${process.env.SESSION_SECRET}` || "thisismysecret",
+    secret: `${process.env.SESSION_SECRET}`,
     touchAfter: 24 * 60,
     autoRemove: 'interval'
 });
@@ -40,7 +40,7 @@ store.on("error", function (e) {
 
 app.use(session({
     store,
-    secret: `${process.env.SESSION_SECRET}` || "thisismysecret",
+    secret: `${process.env.SESSION_SECRET}`,
     saveUninitialized: true,
     // cookie: { secure: true },
     resave: false,
