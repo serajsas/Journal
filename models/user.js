@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const bcrypt = require("bcrypt");
+const journal = require('./journal');
 
 const Schema = mongoose.Schema;
 const userSchema = new mongoose.Schema({
@@ -15,7 +16,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, 'email cannot be blank']
     },
-    blogs: [{ type: Schema.ObjectId, ref: 'Post' }]
+    blogs: [journal.schema]
 })
 
 /**
