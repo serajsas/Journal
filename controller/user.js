@@ -36,11 +36,11 @@ const login = async function (req, res, next) {
         const match = await bcrypt.compare(user.password, foundUser.password);
         if (!match)
             return res.render('./pages/login', { err: new Error("Check your username or password") })
-    }else{
+    } else {
         return res.render('./pages/login', { err: new Error("Check your username or password") })
     }
 
-    if (!req.session.loggedIn){
+    if (!req.session.loggedIn) {
         req.session.loggedIn = foundUser._id;
         req.session.username = foundUser.username;
     }
