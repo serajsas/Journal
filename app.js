@@ -60,8 +60,4 @@ app.get('*', (req, res) => {
     res.render('./pages/mainPage')
 })
 app.listen(process.env.PORT || 8080);
-<<<<<<< HEAD
-console.log(`Server is listening on port ${process.env.PORT}`);
-=======
 console.log(`Server is listening on port ${process.env.PORT} || 8080`);
->>>>>>> 714063e94db5e129b1353f45c64f4c71a0bd10ad
