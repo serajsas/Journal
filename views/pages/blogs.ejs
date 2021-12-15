@@ -13,11 +13,11 @@
             <% for (let i=journals.length - 1; i>= 0; i--) { %>
                 <div class="post-container">
                     <h2>
-                        <%= journals[i].date.toLocaleDateString("en-US") %>
+                        <%= journals[i].title %> On: <%= journals[i].date.toLocaleDateString("en-US") %>
                     </h2>
                     <div>
-                        <span>
-                            <%= (journals[i].body).substring(0, 250) %>...
+                        <span class="span-text">
+                            <%= (journals[i].body).substring(0, 200) %>...
                                 <a href="/blog/<%= journals[i]._id %>">Read More</a>
                         </span>
                     </div>

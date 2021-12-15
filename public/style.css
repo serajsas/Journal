@@ -84,3 +84,8 @@ h2,
 .footer-class {
   padding-top: 1rem;
 }
+
+.span-text {
+  display: block;
+  word-wrap: break-word;
+}
