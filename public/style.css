@@ -31,9 +31,12 @@ h2,
 }
 
 .home-body {
-  background-image: url("background.jpeg") no-repeat center center fixed;
+  background-image: url("background.jpeg");
+  background-repeat: no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
   background-size: cover;
-}
 
 .all-posts {
   padding-top: 10vh;
