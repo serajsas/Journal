@@ -31,7 +31,8 @@ h2,
 }
 
 .home-body {
-  background-image: url("background.jpeg");
+  background-image: url("background.jpeg") no-repeat center center fixed;
+  background-size: cover;
 }
 
 .all-posts {
