@@ -32,11 +32,9 @@ h2,
 
 .home-body {
   background-image: url("background.jpeg");
-  background-repeat: no-repeat;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
+  background-repeat:no-repeat;
   background-size: cover;
+}
 
 .all-posts {
   padding-top: 10vh;
