@@ -80,11 +80,9 @@ const resetPassword = async function (req, res) {
     if (req.body.newPassword != req.body.confirmNewPassword)
         return res.render('./pages/continueResetPassword', { err: new Error("Passwords do not match") });
     const foundUser = await User.findUser(req.session.usernameToReset, req.session.usernameToReset);
-    if (!foundUser)
-        return res.render('./pages/continueResetPassword', { err: new Error("Check your password") });
     const match = await bcrypt.compare(req.body.oldPassword, foundUser.password);
     if (!match) {
-        return res.render('./pages/continueResetPassword', { err: new Error("Check your credentials") });
+        return res.render('./pages/continueResetPassword', { err: new Error("Check your password") });
     }
     foundUser.password = req.body.newPassword;
     try {
@@ -98,7 +96,6 @@ const resetPassword = async function (req, res) {
 
 const continueReset = async function (req, res) {
     const { username } = req.query;
-    console.log(username)
     const foundUser = await User.findUser(username, username);
     if (!foundUser)
         return res.render('./pages/resetPassword', { err: new Error("Check your username or email") })
