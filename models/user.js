@@ -30,6 +30,24 @@ userSchema.statics.findUser = async function (username, email) {
     return user == null ? null : user;
 }
 
+
+/**
+ * 
+ * @param {string} username 
+ * @param {string} email 
+ * @returns returns user if it exists otherwise returns null
+ */
+ userSchema.statics.updateUser = async function (username, email,password) {
+    const user = await this.findOne({ $or: [{ username }, { email }] });
+    user.password = password;
+    try{
+        await user.save();
+        return true;
+    }catch(err){
+        return false;
+    }
+}
+
 userSchema.statics.findUserByID = async function (id) {
     const user = await this.findById(id);
     return user == null ? null : user;

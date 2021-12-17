@@ -31,23 +31,26 @@ h2,
 }
 
 .home-body {
-  background-image: url("background.jpeg");
-  background-repeat:no-repeat;
+  /* background-image: url("background.jpeg"); */
+  background-color: rgb(255 254 252);
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
   background-size: cover;
 }
 
 .all-posts {
-  padding-top: 10vh;
+  padding-top: 3vh;
 }
 
 .post-container {
+  margin: 3vh;
   padding: 3vh;
   border-radius: 15px;
   border: solid #bdbdbd 0;
   box-shadow: 12px 8px 43px rgba(0, 0, 0, 0.1);
   -webkit-box-shadow: 12px 8px 43px rgba(0, 0, 0, 0.1);
   -moz-box-shadow: 12px 8px 43px rgba(0, 0, 0, 0.1);
-  margin-bottom: 3vh;
 }
 
 .post-container h2 {
@@ -59,7 +62,7 @@ h2,
 .individual-post p {
   margin: 0px;
   font-size: 1.2em;
-  
+
 }
 
 .compose-form>label {
@@ -92,3 +95,4 @@ h2,
   display: block;
   word-wrap: break-word;
 }
+
