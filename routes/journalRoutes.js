@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createJournal, renderCompose, renderBlog, renderBlogs, renderEditBlog,updateJournal } = require('../controller/journal')
+const { createJournal, renderCompose, renderBlog, renderBlogs, renderEditBlog, updateJournal, deleteJournal } = require('../controller/journal')
 const { isLoggedIn } = require('../middlewares')
 
 router.route('/compose')
@@ -14,7 +14,10 @@ router.route('/compose/edit/:id')
 router.route('/blog/:id')
     .get(isLoggedIn, renderBlog)
 
+router.route('/blog/delete/:id')
+    .get(isLoggedIn, deleteJournal)
+
 router.route('/blogs')
-    .get(isLoggedIn,renderBlogs)
+    .get(isLoggedIn, renderBlogs)
 
 module.exports = router;

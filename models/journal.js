@@ -21,6 +21,7 @@ journalSchema.statics.findJournalByID = async function (id) {
     return journal == null ? null : journal;
 }
 
+
 journalSchema.pre('save', function (next) {
     if (!this.isModified('body')) return next();
     next();

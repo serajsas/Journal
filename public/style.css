@@ -75,6 +75,7 @@ h2,
 
 .save-btn {
   border-radius: 12px;
+  margin: 2vh;
 }
 
 .post-area {
@@ -96,3 +97,8 @@ h2,
   word-wrap: break-word;
 }
 
+.delete-text{
+  display: block;
+  word-wrap: break-word;
+  margin: 4vh;
+}
