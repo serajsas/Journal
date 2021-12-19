@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { encrypt } = require('../utils/crypto');
 
 const journalSchema = new mongoose.Schema({
     body: {
@@ -22,9 +21,5 @@ journalSchema.statics.findJournalByID = async function (id) {
 }
 
 
-journalSchema.pre('save', function (next) {
-    if (!this.isModified('body')) return next();
-    next();
-})
 
 module.exports = mongoose.model('Journal', journalSchema);

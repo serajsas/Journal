@@ -97,8 +97,24 @@ h2,
   word-wrap: break-word;
 }
 
-.delete-text{
+.delete-text {
   display: block;
   word-wrap: break-word;
   margin: 4vh;
+}
+
+/* add button styles */
+.addImg {
+  height: 5%;
+  position: fixed;
+  bottom: 3rem;
+  right: 5rem;
+  z-index: 100;
+}
+
+.addImg:hover{
+  
+    transform: rotate(90deg); /* Equal to rotateZ(45deg) */
+    background-color: rgb(183, 243, 208);
+  
 }
