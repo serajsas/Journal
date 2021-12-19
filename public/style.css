@@ -118,3 +118,12 @@ h2,
     background-color: rgb(183, 243, 208);
   
 }
+
+.policy{
+  height: 5%;
+  position: fixed;
+  bottom: 3rem;
+  right: 5rem;
+  z-index: 100;
+  color: rgb(26, 15, 2);
+}
