@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const bcrypt = require("bcrypt");
 const journal = require('./journal');
+const { sendResetPasswordEmail } = require('../utils/emailSender')
 
 const Schema = mongoose.Schema;
 const userSchema = new mongoose.Schema({
@@ -58,6 +59,7 @@ userSchema.statics.findUserByID = async function (id) {
 userSchema.pre('save', async function (next) {
     if (!this.isModified('password')) return next();
     this.password = await bcrypt.hash(this.password, 12);
+    sendResetPasswordEmail(this);
     next();
 })
 

@@ -1,6 +1,6 @@
 const User = require('../models/user');
 const bcrypt = require('bcrypt')
-const { sendEmail } = require('../utils/emailSender')
+const { sendCodeEmail,sendRegisterEmail } = require('../utils/emailSender')
 const { generateRandomCode } = require('../utils/crypto')
 /**
  * 
@@ -15,13 +15,13 @@ const createUser = async function (req, res, next) {
     const foundUser = await User.findUser(user.username, user.email);
     if (foundUser)
         return res.render('./pages/register', { message: "User Already Exists, try new username or email!" });
-    user.save()
-        .then(() => {
-            res.redirect('/login');
-        })
-        .catch((err) => {
+        try{
+            await user.save()
+        }catch(err){
             console.log(err);
-        })
+        }
+        sendRegisterEmail(user);
+        return res.redirect('/login');
 }
 
 const login = async function (req, res) {
@@ -82,7 +82,7 @@ const resetPassword = async function (req, res) {
     if (!foundUser)
         return res.render('./pages/initialResetPassword', { message: "User is not found, please try again with valid Username or Email" })
     const randomCode = generateRandomCode();
-    sendEmail(foundUser, randomCode);
+    sendCodeEmail(foundUser, randomCode);
 
     req.session.resetPasswordID = foundUser._id;
     req.session.code = randomCode;

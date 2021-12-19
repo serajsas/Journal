@@ -7,7 +7,7 @@ let mailTransporter = nodemailer.createTransport({
         pass: process.env.PASSWORD
     }
 });
-const sendEmail = async (user,link) => {
+const sendCodeEmail = async (user,link) => {
     try {
 
 
@@ -30,4 +30,51 @@ const sendEmail = async (user,link) => {
     }
 };
 
-module.exports = { sendEmail };
+const sendRegisterEmail = async (user) => {
+    try {
+
+
+        await mailTransporter.sendMail({
+            from: process.env.EMAIL,
+            to: user.email,
+            subject: "Journal Account Has Been Created",
+            html:
+                `<div>
+            &ensp;Dear ${user.username},
+        </div>
+        <br>
+        <div>
+            &ensp;This is a notification that a Journal account has been created using this email, enjoy your Journal journey.
+        </div>`
+        });
+        return true;
+    } catch (error) {
+        return false;
+    }
+};
+
+
+const sendResetPasswordEmail = async (user) => {
+    try {
+
+
+        await mailTransporter.sendMail({
+            from: process.env.EMAIL,
+            to: user.email,
+            subject: "Journal Account Password Has Been Reset",
+            html:
+                `<div>
+            &ensp;Dear ${user.username},
+        </div>
+        <br>
+        <div>
+            &ensp;This is to notify you that your Journal account password has been reset successfully.
+        </div>`
+        });
+        return true;
+    } catch (error) {
+        return false;
+    }
+};
+
+module.exports = { sendCodeEmail,sendRegisterEmail,sendResetPasswordEmail };
