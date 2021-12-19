@@ -2,7 +2,7 @@
 const journal = require('../models/journal');
 const Journal = require('../models/journal');
 const User = require('../models/user');
-const { encryptJournal, decryptJournal,decrypt } = require('../utils/crypto')
+const { encryptJournal, decryptJournal, decrypt } = require('../utils/crypto')
 
 
 

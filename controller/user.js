@@ -1,7 +1,7 @@
 const User = require('../models/user');
 const bcrypt = require('bcrypt')
 const { sendCodeEmail, sendRegisterEmail } = require('../utils/emailSender')
-const { generateRandomCode } = require('../utils/crypto')
+const { generateRandomCode, decrypt } = require('../utils/crypto')
 /**
  * 
  * @param {any} req 
@@ -48,7 +48,16 @@ const login = async function (req, res) {
         req.session.loggedIn = foundUser._id;
         req.session.username = foundUser.username;
     }
-    return res.render("./pages/blogs", { name: foundUser.username, journals: foundUser.blogs, message: false });
+    let journals = foundUser.blogs.map(journal => {
+        return {
+            _id: journal._id,
+            title: decrypt(journal.title),
+            body: decrypt(journal.body),
+            date: journal.date
+        }
+    })
+
+    return res.render("./pages/blogs", { name: foundUser.username, journals, message: false });
 }
 
 const renderLogin = async function (req, res) {
@@ -139,7 +148,15 @@ const updatePassword = async function (req, res) {
     } catch (err) {
         return res.render('./pages/updatePassword', { message: "Error saving the password, try again" });
     }
-    res.render("./pages/blogs", { name: req.session.username, journals: user.blogs, message: "Password updated successfully" });
+    let journals = user.blogs.map(journal => {
+        return {
+            _id: journal._id,
+            title: decrypt(journal.title),
+            body: decrypt(journal.body),
+            date: journal.date
+        }
+    })
+    res.render("./pages/blogs", { name: req.session.username, journals, message: "Password updated successfully" });
 }
 
 const renderUpdatePassword = function (req, res) {
