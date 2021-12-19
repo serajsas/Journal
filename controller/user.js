@@ -26,7 +26,7 @@ const createUser = async function (req, res, next) {
 
 const login = async function (req, res) {
     if (req.session.loggedIn)
-        return res.redirect('/home')
+        return res.redirect('/blogs')
     const user = new User(req.body);
     if (!user.username || !user.password)
         return res.render('./pages/login', { message: "Missing Credentials" })
