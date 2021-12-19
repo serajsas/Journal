@@ -4,7 +4,7 @@
 </head>
 <div class="compose-area container all-posts ">
     <h2>Start writing now, your space is endless...</h2>
-    <form class="form-group compose-form" action="/compose/edit/<%= journal._id%>" method="post" autocomplete="off">
+    <form class="form-group compose-form" action="/compose/edit/<%= journal._id%>" method="POST" autocomplete="off">
         <label for="title">Today's Chapter Title</label>
         <input type="text" class="form-control" name="title" rows="5" cols="30" required contenteditable="true"
             value="<% if (journal) { %><%= journal.title %><% } %>">

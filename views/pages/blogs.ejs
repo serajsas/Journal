@@ -3,25 +3,35 @@
         <%- include('../partials/navbarAfterLogin') %>
 </head>
 
-<div class="all-posts container">
-    <h2>Welcome back, <%= name %>
-    </h2>
-    <%if (journals.length===0) { %>
-        <h2>You don't have any posts! Click the New Blog button</h2>
+<% if (message) { %>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <%= message %>
+    </div>
+    <% } %>
 
-        <% } else { journals.sort(function(a, b) {return new Date(a.date) - new Date(b.date)});}%>
-            <% for (let i=journals.length - 1; i>= 0; i--) { %>
-                <div class="post-container">
-                    <h2>
-                        <%= journals[i].title %> On: <%= journals[i].date.toLocaleDateString("en-US") %>
-                    </h2>
-                    <div>
-                        <span class="span-text">
-                            <%= (journals[i].body).substring(0, 200) %>...
-                                <a href="/blog/<%= journals[i]._id %>">Read More</a>
-                        </span>
-                    </div>
-                </div>
-                <% } %>
-</div>
-<%- include("../partials/footer") -%>
+
+        <div class="all-posts container">
+            <h2>Welcome back, <%= name %>
+            </h2>
+            <%if (journals.length===0) { %>
+                <h2>You don't have any posts! Click the New Blog button</h2>
+
+                <% } else { journals.sort(function(a, b) {return new Date(a.date) - new Date(b.date)});}%>
+                    <% for (let i=journals.length - 1; i>= 0; i--) { %>
+                        <div class="post-container">
+                            <h2>
+                                <%= journals[i].title %> On: <%= journals[i].date.toLocaleDateString("en-US") %>
+                            </h2>
+                            <div>
+                                <span class="span-text">
+                                    <%= (journals[i].body).substring(0, 200) %>...
+                                        <a href="/blog/<%= journals[i]._id %>">Read More</a>
+                                </span>
+                            </div>
+                        </div>
+                        <% } %>
+        </div>
+        <%- include("../partials/footer") -%>

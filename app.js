@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const path = require('path');
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
+const flash = require('connect-flash');
 
 const MongoDBStore = require("connect-mongo");
 
@@ -52,6 +53,8 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(flash());
+
 // routes
 app.use('/', authRoutes);
 app.use('/', journalRoutes);

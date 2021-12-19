@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { renderLogin, renderRegister, createUser, login, renderLogout, renderResetPassword,
-    resetPassword, continueReset, renderUpdatePassword, updatePassword } = require('../controller/user')
+    resetPassword, getResetPasswordPage, renderUpdatePassword, updatePassword, updatePasswordAfterReset } = require('../controller/user')
 
 router.route('/register')
     .post(createUser)
@@ -13,13 +13,20 @@ router.route('/login')
 
 router.route('/logout')
     .get(renderLogout);
-router.route('/resetpassword')
-    .get(renderResetPassword)
-    .post(resetPassword);
-router.route('/continuereset')
-    .get(continueReset);
+
 router.route('/updatepassword')
     .get(renderUpdatePassword)
     .post(updatePassword);
 
+
+router.route('/resetpassword')
+    .get(renderResetPassword)
+    .post(resetPassword);
+router.route('/resetpassword/:id')
+    .get(getResetPasswordPage)
+    .post(updatePasswordAfterReset);
+
+
+// router.route('/updatepasswordafterreset')
+//     .get(updatePassowrdAfterReset);
 module.exports = router;
