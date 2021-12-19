@@ -1,5 +1,13 @@
 <%- include('../partials/head') %>
     <%- include('../partials/navbarBeforeLogin') %>
+    <% if (message) { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <%= message %>
+        </div>
+        <% } %>
         <div class="banner">
             <div class="container mt-5 login-container">
                 <h1>Register</h1>
@@ -7,11 +15,7 @@
                     <div class="col-sm-8">
                         <div class="card">
                             <div class="card-body">
-                                <% if (err) { %>
-                                    <div class="alert alert-warning" role="alert">
-                                        <%= err %>
-                                    </div>
-                                    <% } %>
+                              
                                 <form action="/register" method="POST">
                                     <div class="form-group">
                                         <label for="text">Username</label>

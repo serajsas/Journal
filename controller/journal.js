@@ -19,7 +19,7 @@ const renderEditBlog = async function (req, res) {
 
 }
 
-const updateJournal = async function(req,res){
+const updateJournal = async function (req, res) {
     const user = await User.findUser(req.session.username);
     const journal = user.blogs.find((blog) => blog._id == req.params.id)
     journal.body = req.body.body;
@@ -27,7 +27,7 @@ const updateJournal = async function(req,res){
     journal.date = new Date().toLocaleDateString().split('T')[0];
     await user.save();
     return res.render('./pages/blog', { journal })
-    
+
 }
 
 const renderBlog = async function (req, res) {
@@ -38,8 +38,8 @@ const renderBlog = async function (req, res) {
 
 const renderBlogs = async function (req, res) {
     const user = await User.findUser(req.session.username);
-    return res.render("./pages/blogs", { name: req.session.username, journals: user.blogs });
+    return res.render("./pages/blogs", { name: req.session.username, journals: user.blogs, message: false });
 }
 
 
-module.exports = { createJournal, renderCompose, renderBlog, renderBlogs, renderEditBlog,updateJournal }
+module.exports = { createJournal, renderCompose, renderBlog, renderBlogs, renderEditBlog, updateJournal }

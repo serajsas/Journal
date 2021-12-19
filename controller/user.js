@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const bcrypt = require('bcrypt')
-
+const { sendEmail } = require('../utils/emailSender')
+const { generateRandomCode } = require('../utils/crypto')
 /**
  * 
  * @param {any} req 
@@ -10,10 +11,10 @@ const bcrypt = require('bcrypt')
 const createUser = async function (req, res, next) {
     const user = new User(req.body);
     if (!user.email || !user.password || !user.username)
-        return res.render('./pages/register', { err: new Error("Missing Credentials") });
+        return res.render('./pages/register', { message: "Missing Credentials" });
     const foundUser = await User.findUser(user.username, user.email);
     if (foundUser)
-        return res.render('./pages/register', { err: new Error("User Already Exists, try new username or email!") });
+        return res.render('./pages/register', { message: "User Already Exists, try new username or email!" });
     user.save()
         .then(() => {
             res.redirect('/login');
@@ -28,7 +29,7 @@ const login = async function (req, res) {
         return res.redirect('/home')
     const user = new User(req.body);
     if (!user.username || !user.password)
-        return res.render('./pages/login', { err: new Error("Missing Credentials") })
+        return res.render('./pages/login', { message: "Missing Credentials" })
 
     // username fields can read username or email
     const email = user.username;
@@ -38,16 +39,16 @@ const login = async function (req, res) {
     if (foundUser != null) {
         const match = await bcrypt.compare(user.password, foundUser.password);
         if (!match)
-            return res.render('./pages/login', { err: new Error("Check your username or password") })
+            return res.render('./pages/login', { message: "Check your username or password" })
     } else {
-        return res.render('./pages/login', { err: new Error("Check your username or password") })
+        return res.render('./pages/login', { message: "Check your username or password" })
     }
 
     if (!req.session.loggedIn) {
         req.session.loggedIn = foundUser._id;
         req.session.username = foundUser.username;
     }
-    return res.render("./pages/blogs", { name: foundUser.username, journals: foundUser.blogs });
+    return res.render("./pages/blogs", { name: foundUser.username, journals: foundUser.blogs, message: false });
 }
 
 const renderLogin = async function (req, res) {
@@ -58,11 +59,11 @@ const renderLogin = async function (req, res) {
             return res.redirect('/blogs')
         }
     }
-    return res.render('./pages/login', { err: false });
+    return res.render('./pages/login', { message: false });
 }
 
 const renderRegister = function (req, res) {
-    return res.render('./pages/register', { err: false });
+    return res.render('./pages/register', { message: false });
 }
 
 const renderLogout = function (req, res) {
@@ -73,59 +74,85 @@ const renderLogout = function (req, res) {
     })
 }
 const renderResetPassword = function (req, res) {
-    return res.render('./pages/resetPassword', { err: false })
+    return res.render('./pages/initialResetPassword', { message: false })
 }
 
 const resetPassword = async function (req, res) {
-    if (req.body.newPassword != req.body.confirmNewPassword)
-        return res.render('./pages/continueResetPassword', { err: new Error("Passwords do not match") });
-    const foundUser = await User.findUser(req.session.usernameToReset, req.session.usernameToReset);
-    const match = await bcrypt.compare(req.body.oldPassword, foundUser.password);
-    if (!match) {
-        return res.render('./pages/continueResetPassword', { err: new Error("Check your password") });
-    }
-    foundUser.password = req.body.newPassword;
-    try {
-        await foundUser.save();
-    } catch (err) {
-        return res.render('./pages/continueResePassword',
-            { err: new Error("Error occured while resetting your password, try again...") });
-    }
-    return res.redirect('/login');
+    const foundUser = await User.findUser(req.body.username, req.body.username);
+    if (!foundUser)
+        return res.render('./pages/initialResetPassword', { message: "User is not found, please try again with valid Username or Email" })
+    const randomCode = generateRandomCode();
+    sendEmail(foundUser, randomCode);
+
+    req.session.resetPasswordID = foundUser._id;
+    req.session.code = randomCode;
+    return res.redirect(`/resetpassword/${foundUser._id}`)
 }
 
-const continueReset = async function (req, res) {
-    const { username } = req.query;
-    const foundUser = await User.findUser(username, username);
-    if (!foundUser)
-        return res.render('./pages/resetPassword', { err: new Error("Check your username or email") })
-    req.session.usernameToReset = username;
-    return res.render('./pages/continueResetPassword', { err: false });
+const getResetPasswordPage = async function (req, res) {
+    if (!req.session.resetPasswordID)
+        return res.render('./pages/initialResetPassword', { message: "Error occured while resetting your password, please try again" })
+
+    return res.render('./pages/successfulPasswordReset', { message: "Please check your email for the code", id: req.params.id })
+}
+
+const updatePasswordAfterReset = async function (req, res) {
+    if (!req.session.resetPasswordID || !req.params.id || !req.session.code) {
+        return res.render('./pages/initialResetPassword', { message: "Error occured while resetting your password, please try again" })
+    }
+    if (req.body.newPassword != req.body.confirmNewPassword)
+        return res.render('./pages/successfulPasswordReset', { message: "Passwords do not match", id: req.params.id })
+
+    const user = await User.findUserByID(req.session.resetPasswordID);
+    const match = req.session.code == req.body.code;
+
+    if (!match)
+        return res.render('./pages/initialResetPassword', { message: "Error occured while resetting your password, please try again" })
+
+    user.password = req.body.newPassword;
+
+    try {
+        await user.save();
+    } catch (err) {
+        return res.render('./pages/initialResetPassword', { message: "Error occured while resetting your password, please try again" })
+    }
+    return res.redirect('/login')
 }
 
 const updatePassword = async function (req, res) {
     if (!req.session.loggedIn) {
-        return res.render('./pages/login', { err: new Error("Please login to update your password") })
+        return res.render('./pages/login', { message: "Please login to update your password" })
     }
     if (req.body.newPassword != req.body.confirmNewPassword)
-        return res.render('./pages/updatePassword', { err: new Error("Passwords do not match") });
+        return res.render('./pages/updatePassword', { message: "Passwords do not match" });
+
     const user = await User.findUserByID(req.session.loggedIn);
+    const match = await bcrypt.compare(req.body.oldPassword, user.password);
+
+    if (!match)
+        return res.render('./pages/updatePassword', { message: "Please check your password" });
+
     user.password = req.body.newPassword;
+
     try {
         await user.save();
     } catch (err) {
-        console.log(err)
-        return res.render('./pages/updatePassword', { err: new Error("Error saving the password, try again") });
+        return res.render('./pages/updatePassword', { message: "Error saving the password, try again" });
     }
-    return res.redirect('/blogs')
+    res.render("./pages/blogs", { name: req.session.username, journals: user.blogs, message: "Password updated successfully" });
 }
 
 const renderUpdatePassword = function (req, res) {
     if (!req.session.loggedIn)
-        return res.render('./pages/login', { err: new Error("Please login to update your password") })
-    return res.render('./pages/updatePassword', { err: false });
+        return res.render('./pages/login', { message: "Please login to update your password" })
+    return res.render('./pages/updatePassword', { message: false });
+}
+
+const renderClosePage = function (req, res) {
+    return res.render('./pages/closePage');
 }
 module.exports = {
     createUser, renderLogin, renderRegister, login, renderLogout,
-    renderResetPassword, resetPassword, continueReset, renderUpdatePassword, updatePassword
+    renderResetPassword, resetPassword, getResetPasswordPage,
+    renderUpdatePassword, updatePassword, renderClosePage, updatePasswordAfterReset
 }
