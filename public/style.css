@@ -119,6 +119,15 @@ h2,
   
 }
 
+.back {
+  height: 5%;
+  position: fixed;
+  bottom: 3rem;
+  right: 5rem;
+  z-index: 100;
+}
+
+
 .policy{
   height: 5%;
   position: fixed;
@@ -127,3 +136,11 @@ h2,
   z-index: 100;
   color: rgb(26, 15, 2);
 }
+
+/* unvisited link */
+.blogs-tags {
+  color: black;
+  text-decoration: underline;
+}
+
+

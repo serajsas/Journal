@@ -22,13 +22,17 @@
                 <% } else { journals.sort(function(a, b) {return new Date(a.date) - new Date(b.date)});}%>
                     <% for (let i=journals.length - 1; i>= 0; i--) { %>
                         <div class="post-container">
-                            <h2 class="span-text">
-                                <%= journals[i].title %> On: <%= journals[i].date.toLocaleDateString("en-US") %>
-                            </h2>
+                            <a class="blogs-tags" href="/blog/<%= journals[i]._id %>">
+
+                                <h2 class="span-text">
+                                    <%= journals[i].title %> On: <%= journals[i].date.toLocaleDateString("en-US") %>
+                                </h2>
+                            </a>
+
                             <div>
+
                                 <span class="span-text">
                                     <%= (journals[i].body).substring(0, 200) %>...
-                                        <a href="/blog/<%= journals[i]._id %>">Read More</a>
                                 </span>
                             </div>
                         </div>
