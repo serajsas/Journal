@@ -137,10 +137,9 @@ h2,
   color: rgb(26, 15, 2);
 }
 
-/* unvisited link */
 .blogs-tags {
   color: black;
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 
