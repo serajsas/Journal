@@ -114,7 +114,7 @@ h2,
 
 .addImg:hover{
   
-    transform: rotate(90deg); /* Equal to rotateZ(45deg) */
+    transform: rotate(135deg); /* Equal to rotateZ(45deg) */
     background-color: rgb(183, 243, 208);
   
 }

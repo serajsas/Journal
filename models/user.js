@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 const bcrypt = require("bcrypt");
 const journal = require('./journal');
-const { sendResetPasswordEmail } = require('../utils/emailSender')
 
 const Schema = mongoose.Schema;
 const userSchema = new mongoose.Schema({

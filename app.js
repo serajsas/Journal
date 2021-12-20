@@ -1,4 +1,4 @@
-if (process.env.NODE_ENV !== "production") {
+if (process.env.NODE_ENV !== "PRODUCTION") {
     require('dotenv').config();
 }
 const mongoose = require('mongoose');
@@ -30,7 +30,7 @@ mongoose.connect(
 //set up express session
 const store = MongoDBStore.create({
     mongoUrl: url,
-    secret: `${process.env.SESSION_SECRET}` || "thisismysecret",
+    secret: `${process.env.SESSION_SECRET}`,
     touchAfter: 24 * 60,
     autoRemove: 'interval'
 });
@@ -41,9 +41,8 @@ store.on("error", function (e) {
 
 app.use(session({
     store,
-    secret: `${process.env.SESSION_SECRET}` || "thisismysecret",
+    secret: `${process.env.SESSION_SECRET}`,
     saveUninitialized: true,
-    // cookie: { secure: true },
     resave: false,
 }));
 // set the view engine to ejs
@@ -62,5 +61,4 @@ app.use('/', journalRoutes);
 app.get('*', (req, res) => {
     return res.render('./pages/mainPage')
 })
-app.listen(process.env.PORT || 8080);
-// console.log(`Server is listening on port ${process.env.PORT} || 8080`);
+app.listen(process.env.PORT);
