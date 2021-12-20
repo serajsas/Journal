@@ -9,7 +9,7 @@ let mailTransporter = nodemailer.createTransport({
         pass: process.env.PASSWORD
     }
 });
-const sendCodeEmail = async (user,link) => {
+const sendCodeEmail = async (user,code) => {
     try {
 
 
@@ -23,7 +23,7 @@ const sendCodeEmail = async (user,link) => {
         </div>
         <br>
         <div>
-            &ensp;Please use the following code to reset your password: &ensp;${link}
+            &ensp;Please use the following code to reset your password: &ensp;${code}
         </div>`
         });
         return true;
@@ -79,4 +79,28 @@ const sendResetPasswordEmail = async (user) => {
     }
 };
 
-module.exports = { sendCodeEmail,sendRegisterEmail,sendResetPasswordEmail };
+const sendUpdatePasswordEmail = async (user) => {
+    try {
+
+
+        await mailTransporter.sendMail({
+            from: process.env.EMAIL,
+            to: user.email,
+            subject: "Journal Account Password Has Been Updated",
+            html:
+                `<div>
+            &ensp;Dear ${user.username},
+        </div>
+        <br>
+        <div>
+            &ensp;This is to notify you that your Journal account password has been updated successfully.
+        </div>`
+        });
+        return true;
+    } catch (error) {
+        return false;
+    }
+};
+
+
+module.exports = { sendCodeEmail,sendRegisterEmail,sendResetPasswordEmail,sendUpdatePasswordEmail };

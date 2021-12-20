@@ -1,6 +1,6 @@
 const User = require('../models/user');
 const bcrypt = require('bcrypt')
-const { sendCodeEmail, sendRegisterEmail } = require('../utils/emailSender')
+const { sendCodeEmail, sendRegisterEmail, sendResetPasswordEmail, sendUpdatePasswordEmail } = require('../utils/emailSender')
 const { generateRandomCode, decrypt } = require('../utils/crypto')
 /**
  * 
@@ -146,6 +146,7 @@ const updatePassword = async function (req, res) {
 
     try {
         await user.save();
+        sendUpdatePasswordEmail(user);
     } catch (err) {
         return res.render('./pages/updatePassword', { message: "Error saving the password, try again" });
     }
