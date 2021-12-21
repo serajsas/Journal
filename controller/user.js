@@ -122,10 +122,12 @@ const updatePasswordAfterReset = async function (req, res) {
 
     try {
         await user.save();
+        sendResetPasswordEmail(user);
     } catch (err) {
         return res.render('./pages/initialResetPassword', { message: "Error occured while resetting your password, please try again" })
     }
-    sendResetPasswordEmail(this);
+
+
     return res.redirect('/login')
 }
 
